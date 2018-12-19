@@ -1,0 +1,3 @@
+<button class="btn btn-link p-0" *ngIf="authService.currentUser" [ngClass]="{'text-warning': vote && vote.upvote}" (click)="sendVote(true)"><i class="fas fa-angle-up"></i></button>
+<span class="ml-2 mr-2">{{post ? post.score : comment.score}}</span>
+<button class="btn btn-link p-0" *ngIf="authService.currentUser" [ngClass]="{'text-warning': vote && !vote.upvote}" (click)="sendVote(false)"><i class="fas fa-angle-down"></i></button>

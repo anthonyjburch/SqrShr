@@ -1,0 +1,44 @@
+/* You can add global styles to this file, and also import other style files */
+// @import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+// @import '../node_modules/bootswatch/dist/yeti/bootstrap.min.css';
+// @import '../node_modules/@fortawesome/fontawesome-free/css/all.min.css';
+
+@import '../node_modules/bootswatch/dist/yeti/variables';
+@import '../node_modules/bootstrap/scss/bootstrap';
+@import '../node_modules/bootswatch/dist/yeti/bootswatch';
+@import '../node_modules/@fortawesome/fontawesome-free/css/all.min.css';
+
+@import url(https://fonts.googleapis.com/css?family=Pacifico);
+@import url(https://fonts.googleapis.com/css?family=Krub);
+
+
+@media screen and (-webkit-min-device-pixel-ratio:0) { 
+    select,
+    textarea,
+    input {
+      font-size: 16px !important;
+    }
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    font-family: 'Krub', sans-serif;    
+}
+
+.content-wrapper {
+    min-height: 100%;
+    margin-bottom: -40x;
+    padding-bottom: 40px;
+}
+
+.footer-wrapper {
+    height: 40px;
+}
+
+.logo-font {
+    font-family: 'Pacifico', cursive;
+}

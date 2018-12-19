@@ -1,0 +1,45 @@
+<div class="container mt-5 mb-5">
+  <div class="row justify-content-center align-self-center">
+    <div class="col-xs-10 col-sm-8 col-md-6 col-lg-4">
+
+      <div class="card shadow mb-3">
+        <div class="card-header bg-transparent text-center text-primary">
+          <i class="far fa-share-square fa-5x"></i> <br /> <span class="h1 logo-font">Square Share</span>
+        </div>
+        <div class="card-body">
+          <form class="form-signin text-center" [formGroup]="registerForm" (ngSubmit)="register()">
+            <div class="form-group">
+              <input type="text" class="form-control mb-2" [ngClass]="{'is-invalid': registerForm.get('username').errors && registerForm.get('username').touched}" formControlName="username" placeholder="Username" autocapitalize="none" />
+              <div class="invalid-feedback text-left" *ngIf="registerForm.get('username').hasError('required') && registerForm.get('username').touched">Please choose a username</div>
+              <div class="invalid-feedback text-left" *ngIf="registerForm.get('username').hasError('minlength') && registerForm.get('username').touched">Username must be at least 3 characters</div>
+              <div class="invalid-feedback text-left" *ngIf="registerForm.get('username').hasError('maxlength') && registerForm.get('username').touched">Username cannot exceed 30 characters</div>
+              <div class="invalid-feedback text-left" *ngIf="registerForm.get('username').hasError('pattern') && registerForm.get('username').touched">Username must consist of letters, numbers, -, and _</div>
+            </div>
+            <div class="form-group">
+              <input type="password" class="form-control mb-2" [ngClass]="{'is-invalid': registerForm.get('password').errors && registerForm.get('password').touched}" formControlName="password" placeholder="Password" />
+              <div class="invalid-feedback text-left" *ngIf="registerForm.get('password').hasError('required') && registerForm.get('password').touched">Password is required</div>
+              <div class="invalid-feedback text-left" *ngIf="registerForm.get('password').hasError('minlength') && registerForm.get('password').touched">Password must be at least 6 characters</div>
+              <div class="invalid-feedback text-left" *ngIf="registerForm.get('password').hasError('maxlength') && registerForm.get('password').touched">Password cannot exceed 24 charactrs</div>
+            </div>
+            <div class="form-group">
+              <input type="email" class="form-control mb-2" [ngClass]="{'is-invalid': registerForm.get('email').errors && registerForm.get('email').touched}" formControlName="email" placeholder="Email (optional)" />
+              <div class="invalid-feedback text-left" *ngIf="registerForm.get('email').hasError('email') && registerForm.get('email').touched">Enter a valid email address</div>
+            </div>
+            <div class="row justify-content-end">
+              <div class="col-6">
+                <button class="btn btn-primary btn-block" type="submit" [disabled]="!registerForm.valid">Sign up</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="card shadow">
+        <div class="card-body">
+          Already have an account? <button type="button" class="btn btn-link p-0" (click)="signin()">Sign in</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

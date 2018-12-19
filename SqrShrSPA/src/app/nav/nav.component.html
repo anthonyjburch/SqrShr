@@ -1,0 +1,41 @@
+<nav class="navbar shadow-sm navbar-expand-lg navbar-light bg-transparent border-bottom">
+  <div class="container">
+    <a class="navbar-brand logo-font text-primary" *ngIf="loggedIn()" [routerLink]="['/u/', authService.currentUser.username]" ><i class="far fa-share-square fa-2x mr-2"></i>Square Share</a>
+    <a class="navbar-brand logo-font text-primary" *ngIf="!loggedIn()" [routerLink]="['']" ><i class="far fa-share-square fa-2x mr-2"></i>Square Share</a>
+    <button *ngIf="loggedIn()" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" (click)="toggleNav()">
+      <span>
+        <img class="border border-primary p-1 navbar-img" src="{{profileImageUrl || '../../assets/user.png'}}" alt="{{authService.currentUser.username}}">
+      </span>
+    </button>
+
+    <div *ngIf="loggedIn()" class="collapse navbar-collapse" id="navbar" [ngClass]="{'show': !isCollapsed}">
+      <form class="form-inline ml-auto my-2 my-md-0 d-none d-lg-block">
+        <div class="dropdown" dropdown>
+          <a class="text-primary" dropdownToggle>
+            <span>
+              <img class="border border-primary p-1 navbar-img" src="{{profileImageUrl || '../../assets/user.png'}}" alt="{{authService.currentUser.username}}">
+            </span>
+          </a>
+          <div class="dropdown-menu text-primary mt-3" *dropdownMenu>
+            <a class="dropdown-item clickable" [routerLink]="['/u/edit', {outlets: {'profile': ['profile']}}]"><i class="fas fa-user mr-2"></i>{{this.authService.decodedToken?.unique_name}}</a>
+            <div class="dropdown-divider"></div>
+            <!-- <a class="dropdown-item clickable"><i class="fas fa-envelope mr-2"></i>Messages</a> -->
+            <a (click)="logout()" class="dropdown-item clickable"><i class="fas fa-sign-out-alt mr-2"></i>Logout</a>
+          </div>
+        </div>
+      </form>
+      <ul class="navbar-nav text-primary mr-auto d-md-none">
+        <li class="nav-item active">
+          <a class="dropdown-item clickable" [routerLink]="['/u/edit', {outlets: {'profile': ['profile']}}]" routerLinkActive="router-link-active" (click)="toggleNav()"><i class="fas fa-user mr-2"></i>{{this.authService.decodedToken?.unique_name}}</a>
+        </li>
+        <!-- <li class="nav-item">
+          <a  class="dropdown-item clickable" (click)="toggleNav()"><i class="fas fa-envelope mr-2"></i>Messages</a>
+        </li> -->
+        <li class="nav-item">
+          <a (click)="logout()" class="dropdown-item clickable" (click)="toggleNav()"><i class="fas fa-sign-out-alt mr-2"></i>Logout</a>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+</nav>

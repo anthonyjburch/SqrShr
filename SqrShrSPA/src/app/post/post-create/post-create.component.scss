@@ -1,0 +1,20 @@
+.post {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.img-preview {
+  height: 75px;
+  width: 75px;
+  object-fit: cover;
+  opacity: 1;
+}
+
+.img-preview:hover {
+  cursor: pointer;
+  opacity: 0.25;
+  transition: opacity 0.2s ease-out;
+  -moz-transition: opacity 0.2s ease-out;
+  -webkit-transition: opacity 0.2s ease-out;
+  -o-transition: opacity 0.2s ease-out;
+}

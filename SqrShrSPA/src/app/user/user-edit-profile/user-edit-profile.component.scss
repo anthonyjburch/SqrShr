@@ -1,0 +1,28 @@
+.profile-image-thumbnail {
+    width: 200px;
+    height: 200px;
+}
+
+.profile-image-thumbnail.list {
+    width: 100px;
+    height: 100px;
+    padding: 5px;
+}
+
+.profile-image-thumbnail.list.current {
+    border: 1px solid black;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+.profile-image-container {
+    position: relative;
+}
+
+.profile-image-delete-button {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+}

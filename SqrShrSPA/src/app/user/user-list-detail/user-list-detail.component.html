@@ -1,0 +1,14 @@
+<div class="card hovercard">
+  <div class="cardheader">
+
+  </div>
+  <div class="avatar">
+      <img alt="" src="{{user.profileImageUrl || '../../../../../assets/user.png'}}">
+  </div>
+  <div class="info">
+    <div class="title">
+      <a [routerLink]="['/u/', user.username]">{{user.displayName}}</a>
+    </div>
+    <div class="desc">{{user.bio}}</div>
+  </div>
+</div>

@@ -1,0 +1,62 @@
+<div class="row">
+  <div class="col">
+    <!-- <img class="profile-image-thumbnail" alt="" src="{{previewUrl || user.profileImageUrl || '../../../../../assets/user.png'}}"> -->
+    <img class="profile-image-thumbnail" alt="" [src]="previewUrl ? sanitizer.bypassSecurityTrustUrl(previewUrl) : user.profileImageUrl || '../../../../assets/user.png'">
+  </div>
+</div>
+
+<div class="row mt-3 mb-5">
+  <div class="col">
+    <div class="row">
+      <div class="col">
+        <app-user-profile-photo-uploader [user]="user" [profileImages]="profileImages" (previewUrl)="setPreviewUrl($event)"></app-user-profile-photo-uploader>
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col ml-3">
+        <div class="row">
+          <div class="col">
+            <h5>Or select an existing profile picture.</h5>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-2" *ngFor="let profileImage of profileImages">
+            <div class="profile-image-container">
+              <img class="profile-image-thumbnail list" [ngClass]="{'current': profileImage.current, 'clickable': !profileImage.current}" src="{{profileImage.url}}" (click)="setProfileImage(profileImage)" alt="">
+              <button type="button" class="btn btn-danger btn-sm profile-image-delete-button" *ngIf="!profileImage.current" (click)="deleteProfileImage(profileImage)"><i class="far fa-trash-alt"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mt-5">
+  <div class="col">
+    <div class="row">
+      <div class="col">
+        <h2>Edit Profile Information:</h2>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col ml-3">
+        <form #editForm="ngForm" id="editForm" (ngSubmit)="updateUser()">
+          <div class="form-group">
+            <label for="displayName">Name</label>
+            <input type="text" class="form-control" id="displayName" name="displayName" placeholder="Your name" [(ngModel)]="user.displayName">
+          </div>
+          <div class="form-group">
+            <label for="bio">Bio</label>
+            <textarea class="form-control" rows="4" id="bio" name="bio" placeholder="Bio" [(ngModel)]="user.bio"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="Email" [(ngModel)]="user.email">
+          </div>
+          <button class="btn btn-success" [disabled]="!editForm.dirty">Save Changes</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

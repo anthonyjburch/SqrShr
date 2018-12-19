@@ -1,0 +1,3 @@
+<button type="button" class="btn" [ngClass]="{'btn-primary': !targetUser.isFollowing, 'btn-warning': targetUser.isFollowing}" (click)="setFollow()">
+    {{targetUser.isFollowing ? 'Unfollow' : 'Follow'}}
+</button>

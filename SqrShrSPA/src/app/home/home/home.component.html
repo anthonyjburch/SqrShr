@@ -1,0 +1,2 @@
+<app-register *ngIf="!loggedIn() && !signIn" (signIn)="setSignInMode($event)"></app-register>
+<app-signin *ngIf="!loggedIn() && signIn" (signUp)="setSignInMode($event)"></app-signin>

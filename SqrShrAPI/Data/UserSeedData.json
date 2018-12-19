@@ -1,0 +1,178 @@
+[
+    {
+        "Id": 1,
+        "Username": "spiderman",
+        "Password": "password",
+        "DisplayName": "Peter Parker",
+        "Email": "spiderman@SqrShr.com",
+        "DateCreated": "1962-08-01",
+        "DateLastActive": "1962-08-01",
+        "Bio": "Some spiders change colors to blend into their environment. It's a defense mechanism.",
+        "ProfileImages": [
+            {
+                "Id": 1,
+                "Url": "https://res.cloudinary.com/du75hvspj/image/upload/v1542168259/SeedImages/jccbe59fld2l0bft34jl.jpg",
+                "DateAdded": "1962-08-01",
+                "Current": 1,
+                "UserId": 1,
+                "IsDeleted": 0
+            }
+        ],
+        "IsDeleted": false
+    },
+
+    {
+        "Id": 2,
+        "Username": "ironman",
+        "Password": "password",
+        "DisplayName": "Tony Stark",
+        "Email": "ironman@SqrShr.com",
+        "DateCreated": "1963-03-01",
+        "DateLastActive": "1963-03-01",
+        "Bio": "Give me a scotch. I'm starving.",
+        "ProfileImages": [
+            {
+                "Id": 2,
+                "Url": "https://res.cloudinary.com/du75hvspj/image/upload/v1542168286/SeedImages/zwn5yyu4cjwf0xdmy1uc.jpg",
+                "DateAdded": "1963-03-01",
+                "Current": 1,
+                "UserId": 2,
+                "IsDeleted": 0
+            }
+        ],
+        "IsDeleted": false
+    },
+
+    {
+        "Id": 3,
+        "Username": "captainamerica",
+        "Password": "password",
+        "DisplayName": "Steve Rodgers",
+        "Email": "captainamerica@SqrShr.com",
+        "DateCreated": "1941-03-01",
+        "DateLastActive": "1941-03-01",
+        "Bio": "When the mob and the press and the whole world tell you to move, your job is to plant yourself like a tree by the river of truth, and tell the whole world 'No, You Move.",
+        "ProfileImages": [
+            {
+                "Id": 3,
+                "Url": "https://res.cloudinary.com/du75hvspj/image/upload/v1542168315/SeedImages/hgf4bnnyfsw8zxwsnloo.jpg",
+                "DateAdded": "1941-03-01",
+                "Current": 1,
+                "UserId": 3,
+                "IsDeleted": 0
+            }
+        ],
+        "IsDeleted": false
+    },
+
+    {
+        "Id": 4,
+        "Username": "hulk",
+        "Password": "password",
+        "DisplayName": "Bruce Banner",
+        "Email": "hulk@SqrShr.com",
+        "DateCreated": "1962-05-01",
+        "DateLastActive": "1962-05-01",
+        "Bio": "Hulk Smash!",
+        "ProfileImages": [
+            {
+                "Id": 4,
+                "Url": "https://res.cloudinary.com/du75hvspj/image/upload/v1542168336/SeedImages/cukmhyszo6jzsxwyytue.jpg",
+                "DateAdded": "1962-05-01",
+                "Current": 1,
+                "UserId": 4,
+                "IsDeleted": 0
+            }
+        ],
+        "IsDeleted": false
+    },
+
+    {
+        "Id": 5,
+        "Username": "thor",
+        "Password": "password",
+        "DisplayName": "Thor",
+        "Email": "thor@SqrShr.com",
+        "DateCreated": "1962-08-01",
+        "DateLastActive": "1962-08-01",
+        "Bio": "I have no plans to die today.",
+        "ProfileImages": [
+            {
+                "Id": 5,
+                "Url": "https://res.cloudinary.com/du75hvspj/image/upload/v1542168357/SeedImages/ubksorm2a0dfwy0b0kfh.jpg",
+                "DateAdded": "1962-08-01",
+                "Current": 1,
+                "PublicId": "",
+                "UserId": 5,
+                "IsDeleted": 0
+            }
+        ],
+        "IsDeleted": false
+    },
+
+    {
+        "Id": 6,
+        "Username": "hawkeye",
+        "Password": "password",
+        "DisplayName": "Clint Barton",
+        "Email": "hawkeye@SqrShr.com",
+        "DateCreated": "1964-09-01",
+        "DateLastActive": "1964-09-01",
+        "Bio": "I see better from a distance.",
+        "ProfileImages": [
+            {
+                "Id": 6,
+                "Url": "https://res.cloudinary.com/du75hvspj/image/upload/v1542168383/SeedImages/msrdfdxxc4qepcpk6jfi.jpg",
+                "DateAdded": "1964-09-01",
+                "Current": 1,
+                "UserId": 6,
+                "IsDeleted": 0
+            }
+        ],
+        "IsDeleted": false
+    },
+
+    {
+        "Id": 7,
+        "Username": "blackwidow",
+        "Password": "password",
+        "DisplayName": "Natasha Romanova",
+        "Email": "hawkeye@SqrShr.com",
+        "DateCreated": "1964-03-01",
+        "DateLastActive": "1964-03-01",
+        "Bio": "Love is for children.",
+        "ProfileImages": [
+            {
+                "Id": 7,
+                "Url": "https://res.cloudinary.com/du75hvspj/image/upload/v1542168408/SeedImages/hmnvcc5fuvv3ovgcdnlc.jpg",
+                "DateAdded": "1964-03-01",
+                "Current": 1,
+                "UserId": 7,
+                "IsDeleted": 0
+            }
+        ],
+        "IsDeleted": false
+    },
+
+    {
+        "Id": 8,
+        "Username": "loki",
+        "Password": "password",
+        "DisplayName": "Loki",
+        "Email": "hawkeye@SqrShr.com",
+        "DateCreated": "1962-10-01",
+        "DateLastActive": "1962-10-01",
+        "Bio": "Trust my rage.",
+        "ProfileImages": [
+            {
+                "Id": 8,
+                "Url": "https://res.cloudinary.com/du75hvspj/image/upload/v1542168431/SeedImages/z2tkyqfgsugejtprvgh3.jpg",
+                "DateAdded": "1962-10-01",
+                "Current": 1,
+                "UserId": 8,
+                "IsDeleted": 0
+            }
+        ],
+        "IsDeleted": false
+    }
+]

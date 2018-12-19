@@ -1,0 +1,18 @@
+<app-user-detail></app-user-detail>
+
+
+<div class="container">
+  <app-post-create *ngIf="authService.currentUser && user.username === authService.currentUser.username" [posts]="posts" [user]="user"></app-post-create>
+  <app-post [post]="post" [posts]="posts" *ngFor="let post of posts"></app-post>
+  <div class="row" *ngIf="loadingPosts">
+    <div class="col text-center">
+      <i class="fa fa-spinner fa-spin ml-2"></i>
+    </div>
+  </div>
+  <div class="row" *ngIf="endOfPosts">
+    <div class="col text-center">
+      <h5 class="text-muted">No more to show</h5>
+    </div>
+  </div>
+  <button type="button" class="btn btn-primary mb-3" *ngIf="!loadingPosts && !endOfPosts" (click)="loadPosts()">Load more...</button>
+</div>

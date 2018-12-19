@@ -1,0 +1,16 @@
+@import '../../../node_modules/bootswatch/dist/yeti/variables';
+
+.navbar-img {
+    cursor: pointer;
+    height: 50px;
+}
+
+.navbar-toggler {
+    border: none;
+    padding: none;
+}
+
+.clickable {
+    cursor: pointer;
+    color: $primary !important;
+}

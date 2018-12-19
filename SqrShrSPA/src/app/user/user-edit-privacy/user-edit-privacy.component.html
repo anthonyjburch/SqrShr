@@ -1,0 +1,35 @@
+<form #editForm="ngForm" id="editForm">
+  <div class="row mb-2">
+    <div class="col">
+      <span class="h4 clickable" (click)="togglePrivate()"><i class="far mr-2" [ngClass]="{'fa-check-square': user.isPrivate, 'fa-square': !user.isPrivate}" ></i>Private Account</span>
+    </div>
+  </div>
+  <div class="row mb-5">
+    <div class="col">
+      <p>Private account explanation. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque tincidunt
+        est sed mauris viverra, vitae tristique nulla tincidunt. Pellentesque tincidunt est sed mauris viverra, vitae
+        tristique nulla tincidunt. Pellentesque tincidunt est sed mauris viverra, vitae tristique nulla tincidunt.</p>
+    </div>
+  </div>
+</form>
+
+<div class="row mt-5 mb-5" *ngIf="!showDeleteForm" (click)="toggleDeleteForm()">
+  <div class="col">
+    <button class="btn btn-danger">Delete Account</button>
+  </div>
+</div>
+
+<div class="row" [hidden]="!showDeleteForm">
+  <div class="col">
+    <h1>Delete your account?</h1>
+    <h4 class="text-danger">Are you sure? This can't be undone.</h4>
+    <form #deleteForm="ngForm" id="deleteForm" (ngSubmit)="deleteUser()">
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" class="form-control" id="password" name="password" [(ngModel)]="userDelete.password">
+      </div>
+      <button class="btn btn-warning mr-2" type="button" (click)="toggleDeleteForm()">Cancel</button>
+      <button class="btn btn-danger" type="submit" [disabled]="!deleteForm.dirty">Delete</button>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,38 @@
+<div class="container mt-5">
+    <div class="row border shadow p-3">
+        <div class="col-3">
+            <img class="img-fluid" src="{{user.profileImageUrl}}">
+        </div>
+        <div class="col-7">
+            <div class="row mb-2" *ngIf="currentUser && currentUser.username !== user.username">
+                <div class="col">
+                    <app-user-follow-button *ngIf="currentUser" [sourceUser]="currentUser" [targetUser]="user"></app-user-follow-button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <h1><i class="fas fa-lock mr-2" *ngIf="user.isPrivate"></i>{{user.displayName}}</h1>
+                    <h6><i>{{user.username}}</i></h6>
+                    <p class="mt-4">{{user.bio}}</p>
+                </div>
+            </div>
+            <div class="row" *ngIf="canViewProfile()">
+                <div class="col">
+                    <div class="btn-group">
+                        <a class="btn btn-outline-primary" [routerLink]="['/u/', user.username]">
+                            <span *ngIf="!currentUser || currentUser.username !== user.username">Posts</span>
+                            <span *ngIf="currentUser && currentUser.username === user.username">Home</span>
+                        </a>
+                        <a class="btn btn-outline-primary" [routerLink]="['/u/', user.username, 'following']">Following</a>
+                        <a class="btn btn-outline-primary" [routerLink]="['/u/', user.username, 'followers']">Followers</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+

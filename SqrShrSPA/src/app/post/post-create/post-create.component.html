@@ -1,0 +1,36 @@
+<div class="row border shadow mt-3">
+  <div class="col post">
+    <div class="card">
+      <div class="card-header text-center">
+        <button class="btn btn-link" (click)="openEditor()" [disabled]="animationState === 'in'"><span class="h3">New Post</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row border shadow mt-3 mb-3" [@slideInOut]="animationState">
+  <div class="col post">
+    <div class="card">
+      <div class="card-body">
+        <div class="row mb-2">
+          <div class="col-12 col-sm-3">
+              <button class="btn btn-link" (click)="openPhotoSelector()"><span><i class="far fa-images fa-2x"></i></span></button>
+              <button class="btn btn-link"><span><i class="fas fa-globe-americas fa-2x"></i></span></button>
+          </div>
+          <div class="col">
+            <img class="mr-1 mb-1 img-preview" *ngFor="let image of images" (click)="removeImage(image)" [src]="sanitizer.bypassSecurityTrustUrl(image)">
+          </div>
+        </div>
+        <textarea class="form-control" rows="7" [(ngModel)]="content"></textarea>
+        <div class="row mt-2">
+          <div class="col">
+            <button type="button" class="btn btn-primary" (click)="submitPost()" [disabled]="loading"><span>Submit</span><i class="fa fa-spinner fa-spin ml-2" *ngIf="loading"></i></button>
+            <button type="button" class="btn btn-warning ml-2" (click)="closeEditor()" *ngIf="!loading">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<input type="file" class="d-none" name="file" #fileInput ng2FileSelect [uploader]="uploader" />

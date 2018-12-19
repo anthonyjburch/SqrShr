@@ -1,0 +1,110 @@
+<div class="container">
+    <div class="row border shadow mt-5 mb-3">
+        <div class="col post">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row align-text-top">
+                        <div class="col-3 col-sm-2 col-md-2 col-lg-1"><img class="img-fluid" src="{{post.user.profileImageUrl}}"></div>
+                        <div class="col-9 col-sm-10 col-md-10 col-lg-11">
+                            <div class="row">
+                                <div class="col">
+                                    <h5>{{post.user.displayName}}</h5>
+                                </div>
+                                <div class="col text-right" *ngIf="authService.currentUser && post.user.username === authService.currentUser.username"><button class="btn btn-link" (click)="deletePost(post)"><i class="fa fa-times text-right"></i></button></div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                <a [routerLink]="['/u/', post.user.username]"><i>{{post.user.username}}</i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">{{post.dateCreated | localTime | timeAgo | capitalizeFirst}}</p>
+                    <div class="row">
+                        <div class="col-12 col-xl-6 col-lg-6 col-md-8" *ngIf="post.postImages.length">
+                            <carousel>
+                                <slide *ngFor="let img of post.postImages">
+                                    <img src="{{img}}" style="display: block; width: 100%">
+                                </slide>
+                            </carousel>
+                        </div>
+                        <div class="col-12 col-xs-6 col-lg-6 col-md-4">
+                            <p class="card-text mt-2">{{post.content}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent" *ngIf="post.comments.length">
+                    <span class="mr-4"><app-score [post]="post"></app-score></span>
+                    <span class="mr-4">{{post.comments.length}} {{post.comments.length === 1 ? 'Comment' : 'Comments'}}</span>
+                    <span><button type="button" class="btn btn-link" (click)="openModal(postReplyTemplate)"><i class="far fa-comment-alt mr-1"></i>Comment</button></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row border shadow mt-3 mb-3" *ngFor="let comment of post.comments">
+        <div class="col post">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row align-text-top">
+                        <div class="col-3 col-md-2 col-xl-1">
+                            <img class="img-fluid" src="{{comment.user.profileImageUrl}}">
+                            <span><app-score [comment]="comment"></app-score></span>
+                        </div>
+                        <div class="col-9 col-md-10 col-xl-11">
+                            <p>
+                                {{comment.user.displayName}} <span class="text-muted" style="font-size: 75%;">{{comment.dateCreated | localTime | timeAgo | capitalizeFirst }}</span> <br> 
+                                <a [routerLink]="['/u', comment.user.username]"><i>{{comment.user.username}}</i></a>
+                            </p>
+                            <p>{{comment.content}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #postReplyTemplate>
+        <div class="modal-header">
+            <div class="row">
+                <div class="col-2">
+                  <img class="img-fluid" src={{post.user.profileImageUrl}} />
+                </div>
+                <div class="col">
+                  <div class="row">                  
+                    <div class="col">
+                      <h4>{{post.user.username}}</h4>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col">
+                      {{post.content}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+        </div>
+        <div class="modal-body">
+            <div class="row mb-2">
+              <div class="col-2 col-lg-1">
+                <img class="img-fluid" src="{{authService.currentUser.profileImageUrl}}">
+              </div>
+              <div class="col">
+                <h5>Reply:</h5>
+              </div>
+            </div>
+            <div class="row">            
+                <div class="col">
+                  <textarea class="form-control" rows="7" [(ngModel)]="content"></textarea>
+                </div>
+              </div>
+              <div class="row mt-2">
+                  <div class="col">
+                    <button type="button" class="btn btn-primary" (click)="postReply()"><span>Submit</span></button>
+                    <button type="button" class="btn btn-warning ml-2" (click)="cancelReply()">Cancel</button>
+                  </div>
+                </div>
+        </div>
+      </ng-template>

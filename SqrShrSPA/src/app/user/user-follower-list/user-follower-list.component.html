@@ -1,0 +1,32 @@
+<app-user-detail></app-user-detail>
+
+<div class="container">
+        <div class="row border shadow mt-3 mb-3" *ngFor="let follower of followers">
+          <div class="col post">
+            <div class="card">
+              <div class="card-header bg-transparent">
+                <div class="row">
+                  <div class="col-3 col-sm-2 col-md-2 col-lg-1">
+                    <img class="img-fluid" src="{{follower.profileImageUrl}}" />
+                  </div>
+                  <div class="col-6 col-sm-8 col-md-8 col-lg-10">
+                    <div class="row">
+                      <div class="col">
+                        <h5>{{ follower.displayName }}</h5>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col">
+                        <a [routerLink]="['/u/', follower.username]"><i>{{ follower.username }}</i></a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-3 col-sm-2 col-md-2 col-lg-1">
+                    <app-user-follow-button *ngIf="currentUser" [sourceUser]="currentUser" [targetUser]="follower"></app-user-follow-button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
