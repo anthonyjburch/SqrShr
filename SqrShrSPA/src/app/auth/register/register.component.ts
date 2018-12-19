@@ -14,6 +14,8 @@ export class RegisterComponent implements OnInit {
   @Output() signIn = new EventEmitter();
   user: User;
   registerForm: FormGroup;
+  error = false;
+  registering = false;
 
   constructor(private authService: AuthService, private router: Router, private formBuilder: FormBuilder) { }
 
@@ -30,12 +32,13 @@ export class RegisterComponent implements OnInit {
   }
 
   register() {
+    this.registering = true;
     this.user = Object.assign({}, this.registerForm.value);
     this.authService.register(this.user).subscribe(() => {
-      console.log('Registration successful');
       this.login();
     }, error => {
-      console.log(error);
+      this.error = true;
+      this.registering = false;
     }, () => {
       this.router.navigate(['/u']);
     });
