@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Pagination, PaginatedResult } from 'src/app/_models/pagination';
 import { UserService } from 'src/app/_services/user.service';
 import { AuthService } from 'src/app/_services/auth.service';
+import { AlertifyService } from 'src/app/_services/alertify.service';
 
 @Component({
   selector: 'app-post-stream',
@@ -18,7 +19,8 @@ export class PostStreamComponent implements OnInit {
   loadingPosts = false;
   endOfPosts = false;
 
-  constructor(private userService: UserService, public authService: AuthService, private route: ActivatedRoute) { }
+  constructor(private userService: UserService, public authService: AuthService,
+    private route: ActivatedRoute, private alertify: AlertifyService) { }
 
   ngOnInit() {
     this.route.data.subscribe(data => {
@@ -29,7 +31,6 @@ export class PostStreamComponent implements OnInit {
   }
 
   loadPosts() {
-    debugger;
     this.loadingPosts = true;
     this.pagination.currentPage++;
     let newPosts: Post[] = [];
@@ -47,7 +48,7 @@ export class PostStreamComponent implements OnInit {
 
           this.loadingPosts = false;
         }, error => {
-          alert(error);
+          this.alertify.genericError();
         });
     } else {
       this.userService.getPosts(this.user.username, this.pagination.currentPage, this.pagination.itemsPerPage)
@@ -61,7 +62,7 @@ export class PostStreamComponent implements OnInit {
 
           this.loadingPosts = false;
         }, error => {
-          alert(error);
+          this.alertify.genericError();
         });
     }
   }

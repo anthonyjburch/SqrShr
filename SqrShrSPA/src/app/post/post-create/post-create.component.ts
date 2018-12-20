@@ -7,6 +7,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { PostService } from '../../_services/post.service';
 import { Post } from 'src/app/_models/post';
 import { map } from 'rxjs/operators';
+import { AlertifyService } from 'src/app/_services/alertify.service';
 
 @Component({
   selector: 'app-post-create',
@@ -60,7 +61,7 @@ export class PostCreateComponent implements OnInit {
   sanitizer: DomSanitizer;
   loading = false;
 
-  constructor(private postService: PostService, private domSanitizer: DomSanitizer) { }
+  constructor(private postService: PostService, private domSanitizer: DomSanitizer, private alertify: AlertifyService) { }
 
   ngOnInit() {
       this.sanitizer = this.domSanitizer;
@@ -136,7 +137,7 @@ export class PostCreateComponent implements OnInit {
             this.addToPostsList(postResponse['id']);
         }
     }, error => {
-        alert(error);
+        this.alertify.genericError();
     });
   }
 }

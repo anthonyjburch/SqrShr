@@ -5,6 +5,7 @@ import { AuthService } from 'src/app/_services/auth.service';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap';
 import { PostService } from 'src/app/_services/post.service';
 import { map } from 'rxjs/operators';
+import { AlertifyService } from 'src/app/_services/alertify.service';
 
 @Component({
   selector: 'app-post-comments',
@@ -16,7 +17,7 @@ export class PostCommentsComponent implements OnInit {
   content: string;
   modalRef: BsModalRef;
   constructor(public authService: AuthService, private postService: PostService,
-    private route: ActivatedRoute, private modalService: BsModalService) { }
+    private route: ActivatedRoute, private modalService: BsModalService, private alertify: AlertifyService) { }
 
   ngOnInit() {
     this.route.data.subscribe(data => {
@@ -43,7 +44,7 @@ export class PostCommentsComponent implements OnInit {
         this.content = '';
         this.modalRef.hide();
       }, error => {
-        alert(error);
+        this.alertify.genericError();
       })
     ).subscribe();
   }

@@ -8,6 +8,7 @@ import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from 'src/app/_services/auth.service';
 import { DomSanitizer } from '@angular/platform-browser';
+import { AlertifyService } from 'src/app/_services/alertify.service';
 
 @Component({
   selector: 'app-user-edit-profile',
@@ -23,7 +24,8 @@ export class UserEditProfileComponent implements OnInit {
   @ViewChild('editForm') editForm: NgForm;
 
   constructor(private route: ActivatedRoute, private userService: UserService,
-    private http: HttpClient, private authService: AuthService, private domSanitizer: DomSanitizer) { }
+    private http: HttpClient, private authService: AuthService, private domSanitizer: DomSanitizer,
+    private alertify: AlertifyService) { }
 
   ngOnInit() {
     this.sanitizer = this.domSanitizer;
@@ -41,7 +43,7 @@ export class UserEditProfileComponent implements OnInit {
     this.userService.updateUser(this.user).subscribe(next => {
       this.editForm.reset(this.user);
     }, error => {
-      alert(error);
+      this.alertify.genericError();
     });
   }
 
@@ -70,7 +72,7 @@ export class UserEditProfileComponent implements OnInit {
       this.userService.deleteUserProfileImage(this.user, profileImage).subscribe(() => {
         this.profileImages.splice(this.profileImages.findIndex(i => i.id === profileImage.id), 1);
       }, error => {
-        alert(error);
+        this.alertify.genericError();
       });
     }
   }

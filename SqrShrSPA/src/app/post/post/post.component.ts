@@ -7,6 +7,7 @@ import { delay } from 'q';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { AlertifyService } from 'src/app/_services/alertify.service';
 
 @Component({
   selector: 'app-post',
@@ -54,7 +55,7 @@ export class PostComponent implements OnInit {
   animationState = 'in';
 
   constructor(public authService: AuthService, private postService: PostService,
-    private modalService: BsModalService, private router: Router) { }
+    private modalService: BsModalService, private router: Router, private alertify: AlertifyService) { }
 
   ngOnInit() {
   }
@@ -72,7 +73,7 @@ export class PostComponent implements OnInit {
           this.posts.splice(this.posts.findIndex(p => p.id === post.id), 1);
         })();
       }, error => {
-        alert(error);
+        this.alertify.genericError();
       });
     }
   }
@@ -95,7 +96,7 @@ export class PostComponent implements OnInit {
             this.modalRef.hide();
             this.router.navigate(['/u/' + this.post.user.username + '/posts/' + this.post.id]);
         }, error => {
-            alert(error);
+            this.alertify.genericError();
         })
     ).subscribe();
   }

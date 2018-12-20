@@ -3,6 +3,7 @@ import { User } from 'src/app/_models/user';
 import { UserService } from 'src/app/_services/user.service';
 import { ActivatedRoute } from '@angular/router';
 import { Pagination, PaginatedResult } from 'src/app/_models/pagination';
+import { AlertifyService } from 'src/app/_services/alertify.service';
 
 @Component({
   selector: 'app-user-list',
@@ -13,7 +14,7 @@ export class UserListComponent implements OnInit {
   users: User[];
   pagination: Pagination;
 
-  constructor(private userService: UserService, private route: ActivatedRoute) { }
+  constructor(private userService: UserService, private route: ActivatedRoute, private alertify: AlertifyService) { }
 
   ngOnInit() {
     this.route.data.subscribe(data => {
@@ -32,7 +33,7 @@ export class UserListComponent implements OnInit {
       this.users = res.result;
       this.pagination = res.pagination;
     }, error => {
-      alert(error);
+      this.alertify.genericError();
     });
   }
 }

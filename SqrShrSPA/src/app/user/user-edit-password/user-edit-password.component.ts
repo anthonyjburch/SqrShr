@@ -3,6 +3,7 @@ import { User } from '../../_models/user';
 import { ActivatedRoute } from '@angular/router';
 import { UserService } from '../../_services/user.service';
 import { NgForm } from '@angular/forms';
+import { AlertifyService } from 'src/app/_services/alertify.service';
 
 class UserEditPasswordModel {
   username: '';
@@ -21,7 +22,7 @@ export class UserEditPasswordComponent implements OnInit {
 
   @ViewChild('editForm') editForm: NgForm;
 
-  constructor(private route: ActivatedRoute, private userService: UserService) { }
+  constructor(private route: ActivatedRoute, private userService: UserService, private alertify: AlertifyService) { }
 
   ngOnInit() {
     this.route.data.subscribe(data => {
@@ -31,13 +32,13 @@ export class UserEditPasswordComponent implements OnInit {
 
   updatePassword() {
     if (this.user.newPassword !== this.user.confirmPassword) {
-      alert('Passwords dont match');
+      this.alertify.error('Passwords do not match');
     } else {
       this.userService.updatePassword(this.user).subscribe(next => {
-        alert('Password updated successfully');
+        this.alertify.success('Password updated successfully');
         this.editForm.reset();
       }, error => {
-        alert(error);
+        this.alertify.genericError();
       });
     }
   }
