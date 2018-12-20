@@ -5,6 +5,7 @@ import { UserService } from '../../_services/user.service';
 import { AuthService } from '../../_services/auth.service';
 import { VirtualTimeScheduler } from 'rxjs';
 import { NgForm } from '@angular/forms';
+import { AlertifyService } from 'src/app/_services/alertify.service';
 
 class UserDeleteModel {
   username: string;
@@ -23,7 +24,8 @@ export class UserEditPrivacyComponent implements OnInit {
 
   @ViewChild('deleteForm') deleteForm: NgForm;
 
-  constructor(private route: ActivatedRoute, private userService: UserService, private authService: AuthService, private router: Router) { }
+  constructor(private route: ActivatedRoute, private userService: UserService, private authService: AuthService,
+    private router: Router, private alertify: AlertifyService) { }
 
   ngOnInit() {
     this.route.data.subscribe(data => {
@@ -34,9 +36,8 @@ export class UserEditPrivacyComponent implements OnInit {
   togglePrivate() {
     this.user.isPrivate = !this.user.isPrivate;
     this.userService.updateUser(this.user).subscribe(next => {
-      alert('User Privacy set ' + this.user.isPrivate);
     }, error => {
-      alert(error);
+      this.alertify.genericError();
     });
   }
 
@@ -48,11 +49,11 @@ export class UserEditPrivacyComponent implements OnInit {
   deleteUser() {
     this.userDelete.username = this.user.username;
     this.userService.deleteUser(this.userDelete).subscribe(next => {
-      alert('Deleted user ' + this.user.username);
+      this.alertify.success('User deleted');
       this.authService.logout();
       this.router.navigate(['']);
     }, error => {
-      alert(error);
+      this.alertify.genericError();
     });
   }
 }

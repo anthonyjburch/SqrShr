@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 export class SigninComponent implements OnInit {
   @Output() signUp = new EventEmitter();
   model: any = {};
+  invalid: string;
 
   constructor(private authService: AuthService, private router: Router) { }
 
@@ -17,11 +18,15 @@ export class SigninComponent implements OnInit {
   }
 
   login() {
+    this.invalid = '';
     this.authService.login(this.model).subscribe(next => {
-      console.log('Logged in succesfully');
       this.router.navigate(['/u/' + this.model.username]);
     }, error => {
-      console.log(error);
+      if (error === 'Unauthorized') {
+        this.invalid = 'Invalid username or password.';
+      } else {
+        this.invalid = 'Error logging in user';
+      }
     });
   }
 

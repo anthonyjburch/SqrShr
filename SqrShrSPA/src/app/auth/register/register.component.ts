@@ -3,6 +3,7 @@ import { AuthService } from 'src/app/_services/auth.service';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { User } from '../../_models/user';
+import { AlertifyService } from 'src/app/_services/alertify.service';
 
 @Component({
   selector: 'app-register',
@@ -14,8 +15,11 @@ export class RegisterComponent implements OnInit {
   @Output() signIn = new EventEmitter();
   user: User;
   registerForm: FormGroup;
+  error = false;
+  registering = false;
 
-  constructor(private authService: AuthService, private router: Router, private formBuilder: FormBuilder) { }
+  constructor(private authService: AuthService, private router: Router, private formBuilder: FormBuilder,
+    private alertify: AlertifyService) { }
 
   ngOnInit() {
     this.createRegisterForm();
@@ -30,12 +34,13 @@ export class RegisterComponent implements OnInit {
   }
 
   register() {
+    this.registering = true;
     this.user = Object.assign({}, this.registerForm.value);
     this.authService.register(this.user).subscribe(() => {
-      console.log('Registration successful');
       this.login();
     }, error => {
-      console.log(error);
+      this.error = true;
+      this.registering = false;
     }, () => {
       this.router.navigate(['/u']);
     });
@@ -44,7 +49,7 @@ export class RegisterComponent implements OnInit {
   login() {
     this.authService.login(this.user).subscribe(next => {
     }, error => {
-      console.log(error);
+      this.alertify.genericError();
     }, () => {
       this.router.navigate(['/u']);
     });

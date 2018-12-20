@@ -25,9 +25,12 @@
               <input type="email" class="form-control mb-2" [ngClass]="{'is-invalid': registerForm.get('email').errors && registerForm.get('email').touched}" formControlName="email" placeholder="Email (optional)" />
               <div class="invalid-feedback text-left" *ngIf="registerForm.get('email').hasError('email') && registerForm.get('email').touched">Enter a valid email address</div>
             </div>
+            <div class="alert alert-info" role="alert" *ngIf="error">
+              Oops, there was an error registering new user.
+            </div>
             <div class="row justify-content-end">
               <div class="col-6">
-                <button class="btn btn-primary btn-block" type="submit" [disabled]="!registerForm.valid">Sign up</button>
+                <button class="btn btn-primary btn-block" type="submit" [disabled]="!registerForm.valid">Sign up<i class="fa fa-spinner fa-spin ml-2" *ngIf="registering"></i></button>
               </div>
             </div>
           </form>

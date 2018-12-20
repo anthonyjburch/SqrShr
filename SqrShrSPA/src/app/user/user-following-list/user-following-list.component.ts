@@ -4,6 +4,7 @@ import { Pagination, PaginatedResult } from '../../_models/pagination';
 import { UserService } from 'src/app/_services/user.service';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/_services/auth.service';
+import { AlertifyService } from 'src/app/_services/alertify.service';
 
 @Component({
   selector: 'app-user-following-list',
@@ -16,7 +17,8 @@ export class UserFollowingListComponent implements OnInit {
   following: User[];
   pagination: Pagination;
 
-  constructor(private authService: AuthService, private userService: UserService, private route: ActivatedRoute) { }
+  constructor(private authService: AuthService, private userService: UserService, private route: ActivatedRoute,
+    private alertify: AlertifyService) { }
 
   ngOnInit() {
     this.route.data.subscribe(data => {
@@ -34,7 +36,7 @@ export class UserFollowingListComponent implements OnInit {
         this.following = res.result;
         this.pagination = res.pagination;
       }, error => {
-        alert(error);
+        this.alertify.genericError();
       });
   }
 }

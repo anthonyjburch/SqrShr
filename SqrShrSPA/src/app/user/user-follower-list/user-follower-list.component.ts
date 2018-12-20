@@ -5,6 +5,7 @@ import { UserService } from 'src/app/_services/user.service';
 import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { AuthService } from 'src/app/_services/auth.service';
+import { AlertifyService } from 'src/app/_services/alertify.service';
 
 @Component({
   selector: 'app-user-follower-list',
@@ -17,7 +18,8 @@ export class UserFollowerListComponent implements OnInit {
   followers: User[];
   followerPagination: Pagination;
 
-  constructor(private authService: AuthService, private userService: UserService, private route: ActivatedRoute) { }
+  constructor(private authService: AuthService, private userService: UserService, private route: ActivatedRoute,
+    private alertify: AlertifyService) { }
 
   ngOnInit() {
     this.route.data.subscribe(data => {
@@ -35,7 +37,7 @@ export class UserFollowerListComponent implements OnInit {
         this.followers = res.result;
         this.followerPagination = res.pagination;
       }, error => {
-        alert(error);
+        this.alertify.genericError();
       });
   }
 }
