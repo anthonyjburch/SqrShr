@@ -1,13 +1,8 @@
-<div class="row">
-  <div class="col">
-    <img class="profile-image-thumbnail" alt="" [src]="user.profileImageUrl || '../../../../assets/user.png'">
-  </div>
-</div>
-
 <div class="row mt-3 mb-5">
   <div class="col">
+    <h4><i>Profile Image:</i></h4>
     <div class="row">
-      <div class="col">
+      <div class="col ml-3">
         <app-user-profile-photo-uploader [user]="user" [profileImages]="profileImages"></app-user-profile-photo-uploader>
       </div>
     </div>
@@ -35,7 +30,7 @@
   <div class="col">
     <div class="row">
       <div class="col">
-        <h2>Edit Profile Information:</h2>
+        <h4><i>Edit Profile Information:</i></h4>
       </div>
     </div>
     <div class="row">
