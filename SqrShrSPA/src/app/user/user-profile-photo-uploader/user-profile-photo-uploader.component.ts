@@ -1,11 +1,10 @@
-import { Component, OnInit, Input, ElementRef, ViewChild, Renderer, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, Renderer } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { FileUploader } from 'ng2-file-upload';
 import { User } from '../../_models/user';
 import { ProfileImage } from 'src/app/_models/profileImage';
 import { AuthService } from 'src/app/_services/auth.service';
 import { _appIdRandomProviderFactory } from '@angular/core/src/application_tokens';
-import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-user-profile-photo-uploader',
@@ -17,18 +16,15 @@ export class UserProfilePhotoUploaderComponent implements OnInit {
   @ViewChild('fileInput') fileInput: ElementRef;
   @Input() user: User;
   @Input() profileImages: ProfileImage[];
-  @Output() previewUrl = new EventEmitter();
-  sanitizer: DomSanitizer;
   baseUrl = environment.apiUrl;
 
   uploader: FileUploader;
   hasBaseDropZoneOver = false;
 
-  constructor(private render: Renderer, private authService: AuthService, private domSanitizer: DomSanitizer) { }
+  constructor(private render: Renderer, private authService: AuthService) { }
 
   ngOnInit() {
     this.initializeUploader();
-    this.sanitizer = this.domSanitizer;
   }
 
   inputClick() {
@@ -51,8 +47,6 @@ export class UserProfilePhotoUploaderComponent implements OnInit {
       if (this.uploader.queue.length > 1) {
         this.uploader.removeFromQueue(this.uploader.queue[0]);
       }
-      const url = (window.URL) ? window.URL.createObjectURL(file._file) : (window as any).webkitURL.createObjectURL(file._file);
-      this.setPreviewUrl(url);
     };
 
     this.uploader.onSuccessItem = (item, response, status, headers) => {
@@ -60,8 +54,6 @@ export class UserProfilePhotoUploaderComponent implements OnInit {
         if (this.profileImages) {
           this.profileImages.filter(i => i.current)[0].current = false;
         }
-
-        this.setPreviewUrl('');
 
         const res: ProfileImage = JSON.parse(response);
         const profileImage = {
@@ -85,10 +77,6 @@ export class UserProfilePhotoUploaderComponent implements OnInit {
         localStorage.setItem('sqrshr-user', JSON.stringify(this.authService.currentUser));
       }
     };
-  }
-
-  setPreviewUrl(url) {
-    this.previewUrl.emit(url);
   }
 
 }

@@ -1,7 +1,6 @@
 <div class="row">
   <div class="col">
-    <!-- <img class="profile-image-thumbnail" alt="" src="{{previewUrl || user.profileImageUrl || '../../../../../assets/user.png'}}"> -->
-    <img class="profile-image-thumbnail" alt="" [src]="previewUrl ? sanitizer.bypassSecurityTrustUrl(previewUrl) : user.profileImageUrl || '../../../../assets/user.png'">
+    <img class="profile-image-thumbnail" alt="" [src]="user.profileImageUrl || '../../../../assets/user.png'">
   </div>
 </div>
 
@@ -9,7 +8,7 @@
   <div class="col">
     <div class="row">
       <div class="col">
-        <app-user-profile-photo-uploader [user]="user" [profileImages]="profileImages" (previewUrl)="setPreviewUrl($event)"></app-user-profile-photo-uploader>
+        <app-user-profile-photo-uploader [user]="user" [profileImages]="profileImages"></app-user-profile-photo-uploader>
       </div>
     </div>
     <div class="row mt-3">

@@ -7,7 +7,6 @@ import { ProfileImage } from '../../_models/profileImage';
 import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from 'src/app/_services/auth.service';
-import { DomSanitizer } from '@angular/platform-browser';
 import { AlertifyService } from 'src/app/_services/alertify.service';
 
 @Component({
@@ -18,17 +17,13 @@ import { AlertifyService } from 'src/app/_services/alertify.service';
 export class UserEditProfileComponent implements OnInit {
   user: User;
   profileImages: ProfileImage[];
-  previewUrl: string;
-  sanitizer: DomSanitizer;
 
   @ViewChild('editForm') editForm: NgForm;
 
   constructor(private route: ActivatedRoute, private userService: UserService,
-    private http: HttpClient, private authService: AuthService, private domSanitizer: DomSanitizer,
-    private alertify: AlertifyService) { }
+    private http: HttpClient, private authService: AuthService, private alertify: AlertifyService) { }
 
   ngOnInit() {
-    this.sanitizer = this.domSanitizer;
     this.route.data.subscribe(data => {
       this.user = data['user'];
       this.userService.getUserProfileImages(this.user).pipe(
@@ -75,10 +70,6 @@ export class UserEditProfileComponent implements OnInit {
         this.alertify.genericError();
       });
     }
-  }
-
-  setPreviewUrl(url: string) {
-    this.previewUrl = url;
   }
 
 }

@@ -8,7 +8,7 @@
 <div class="row mb-3" *ngIf="uploader?.queue?.length">
   <div class="col">
     <button type="button" class="btn btn-success btn-small mr-2" (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">Submit</button>
-    <button type="button" class="btn btn-warning btn-small" (click)="uploader.clearQueue(); setPreviewUrl('');" [disabled]="!uploader.queue.length">Clear</button>
+    <button type="button" class="btn btn-warning btn-small" (click)="uploader.clearQueue()" [disabled]="!uploader.queue.length">Clear</button>
   </div>
 </div>
 
