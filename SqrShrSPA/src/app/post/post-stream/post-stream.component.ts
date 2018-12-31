@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, HostListener } from '@angular/core';
 import { User } from '../../_models/user';
 import { Post } from 'src/app/_models/post';
 import { ActivatedRoute } from '@angular/router';
@@ -66,5 +66,19 @@ export class PostStreamComponent implements OnInit {
         });
     }
   }
+
+  @HostListener('window:scroll', ['$event'])
+    checkScroll() {
+      const scrollPosition = window.pageYOffset;
+      const body = document.body;
+      const html = document.documentElement;
+      const height = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight,
+        html.scrollHeight, html.offsetHeight);
+      const percentage = +(scrollPosition / height).toFixed(2);
+      if (percentage >= .8 && !this.loadingPosts && this.pagination.totalPages !== this.pagination.currentPage) {
+        this.loadPosts();
+      }
+    }
+
 
 }
