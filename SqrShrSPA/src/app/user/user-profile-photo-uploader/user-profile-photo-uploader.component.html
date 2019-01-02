@@ -1,32 +1,21 @@
-<!-- <div class="file-upload">
-  <input id="custom-input" type="file" (change)="fileChangeListener($event)">
-</div>
-<img-cropper #cropper [image]="cropperImg" [settings]="cropperSettings"></img-cropper>
-<br>
-<span class="result rounded" *ngIf="cropperImg.image" >
-  <img [src]="cropperImg.image" [width]="cropperSettings.croppedWidth" [height]="cropperSettings.croppedHeight">
-</span> -->
-
 <input #fileInput class="hidden" type="file" (change)="fileChangeListener($event)">
+<canvas #canvas class="hidden"></canvas>
 
 <div class="row">
   <div class="col">
-    <button class="btn btn-outline-info" type="button" *ngIf="!cropperImg.image" (click)="launchEditor()">Select New Image</button>
+    <button class="btn btn-outline-info" type="button" *ngIf="!cropping" (click)="launchEditor()">Select New Image</button>
   </div>
 </div>
 
-
-
-<div [ngClass]="{'hidden': !cropperImg.image}">
-  <div class="row mt-3">
-    <div class="col">
-      <img-cropper #cropper [image]="cropperImg" [settings]="cropperSettings"></img-cropper>
-    </div>
+<div class="row">
+  <div class="col text-center">
+    <ngx-croppie #ngxCroppie *ngIf="croppieImage" [imageUrl]="croppieImage" [croppieOptions]="croppieOptions" (result)="updateCroppie($event)"></ngx-croppie>
   </div>
-  <div class="row mt-3">
-    <div class="col">
-      <button type="button" class="btn btn-success btn-small mr-2" (click)="submit()">Submit</button>
-      <button type="button" class="btn btn-warning btn-small" (click)="cancelEditor()">Cancel</button>
-    </div>
+</div>
+
+<div class="row" *ngIf="cropping">
+  <div class="col text-center">
+    <button class="btn btn-success btn-small mr-2" (click)="submit()">Submit</button>
+    <button class="btn btn-warning btn-small" (click)="cancelEditor()">Clear</button>
   </div>
 </div>
