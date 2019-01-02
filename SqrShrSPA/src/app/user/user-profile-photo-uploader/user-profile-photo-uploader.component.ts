@@ -4,6 +4,8 @@ import { User } from '../../_models/user';
 import { ProfileImage } from 'src/app/_models/profileImage';
 import { _appIdRandomProviderFactory } from '@angular/core/src/application_tokens';
 import { ImageCropperComponent, CropperSettings, Bounds } from 'ng2-img-cropper';
+import { UserService } from 'src/app/_services/user.service';
+import { AuthService } from 'src/app/_services/auth.service';
 
 @Component({
   selector: 'app-user-profile-photo-uploader',
@@ -20,7 +22,7 @@ export class UserProfilePhotoUploaderComponent implements OnInit {
   cropperSettings: CropperSettings;
   cropperImg: any;
 
-  constructor() { }
+  constructor(private userService: UserService, private authService: AuthService) { }
 
   ngOnInit() {
     this.cropperImg = {};
@@ -47,7 +49,28 @@ export class UserProfilePhotoUploaderComponent implements OnInit {
   }
 
   submit() {
-    console.log(this.cropperImg.image);
+    const payload: any = {
+      base64string: this.cropper.image.image
+    };
+
+    this.userService.uploadUserProfileImage(this.user, payload).subscribe((profileImage) => {
+      if (this.profileImages) {
+        this.profileImages.filter(i => i.current)[0].current = false;
+      }
+
+      if (this.profileImages) {
+        this.profileImages.unshift(profileImage);
+      } else {
+        this.profileImages = new Array();
+        this.profileImages.push(profileImage);
+      }
+
+      this.user.profileImageUrl = profileImage.url;
+      this.authService.changeProfileImage(profileImage.url);
+      this.authService.currentUser.profileImageUrl = profileImage.url;
+      localStorage.setItem('sqrshr-user', JSON.stringify(this.authService.currentUser));
+      this.cancelEditor();
+    });
   }
 
   launchEditor() {

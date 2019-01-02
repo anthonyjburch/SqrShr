@@ -159,6 +159,10 @@ export class UserService {
     return this.http.get(this.baseUrl + 'users/' + user.username + '/profileimages');
   }
 
+  uploadUserProfileImage(user: User, base64string: any) {
+    return this.http.post<ProfileImage>(this.baseUrl + 'users/' + user.username + '/profileimage/', base64string);
+  }
+
   setUserProfileImage(user: User, profileImage: ProfileImage) {
     return this.http.put(this.baseUrl + 'users/' + user.username + '/profileimage/', profileImage);
   }
