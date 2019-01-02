@@ -1,14 +1,32 @@
-<div class="row mb-3">
+<!-- <div class="file-upload">
+  <input id="custom-input" type="file" (change)="fileChangeListener($event)">
+</div>
+<img-cropper #cropper [image]="cropperImg" [settings]="cropperSettings"></img-cropper>
+<br>
+<span class="result rounded" *ngIf="cropperImg.image" >
+  <img [src]="cropperImg.image" [width]="cropperSettings.croppedWidth" [height]="cropperSettings.croppedHeight">
+</span> -->
+
+<input #fileInput class="hidden" type="file" (change)="fileChangeListener($event)">
+
+<div class="row">
   <div class="col">
-    <input type="file" class="d-none" #fileInput ng2FileSelect [uploader]="uploader" />
-    <button class="btn btn-outline-info" type="button" (click)="inputClick()">Select New Image</button>
+    <button class="btn btn-outline-info" type="button" *ngIf="!cropperImg.image" (click)="launchEditor()">Select New Image</button>
   </div>
 </div>
 
-<div class="row mb-3" *ngIf="uploader?.queue?.length">
-  <div class="col">
-    <button type="button" class="btn btn-success btn-small mr-2" (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">Submit</button>
-    <button type="button" class="btn btn-warning btn-small" (click)="uploader.clearQueue(); setPreviewUrl('');" [disabled]="!uploader.queue.length">Clear</button>
+
+
+<div [ngClass]="{'hidden': !cropperImg.image}">
+  <div class="row mt-3">
+    <div class="col">
+      <img-cropper #cropper [image]="cropperImg" [settings]="cropperSettings"></img-cropper>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col">
+      <button type="button" class="btn btn-success btn-small mr-2" (click)="submit()">Submit</button>
+      <button type="button" class="btn btn-warning btn-small" (click)="cancelEditor()">Cancel</button>
+    </div>
   </div>
 </div>
-

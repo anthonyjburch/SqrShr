@@ -45,7 +45,6 @@ namespace SqrShrAPI.Util
                 });
                 
             CreateMap<UserUpdateDto, User>();
-            CreateMap<ProfileImageUploadDto, ProfileImage>();
             CreateMap<PostImageUploadDto, PostImage>();
             CreateMap<ProfileImage, ProfileImageReturnDto>();
         }

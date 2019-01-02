@@ -1,11 +1,11 @@
-import { Component, OnInit, Input, ElementRef, ViewChild, Renderer, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, Renderer } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { FileUploader } from 'ng2-file-upload';
 import { User } from '../../_models/user';
 import { ProfileImage } from 'src/app/_models/profileImage';
-import { AuthService } from 'src/app/_services/auth.service';
 import { _appIdRandomProviderFactory } from '@angular/core/src/application_tokens';
-import { DomSanitizer } from '@angular/platform-browser';
+import { ImageCropperComponent, CropperSettings, Bounds } from 'ng2-img-cropper';
+import { UserService } from 'src/app/_services/user.service';
+import { AuthService } from 'src/app/_services/auth.service';
 
 @Component({
   selector: 'app-user-profile-photo-uploader',
@@ -14,81 +14,71 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 
 export class UserProfilePhotoUploaderComponent implements OnInit {
+  @ViewChild('cropper') cropper: ImageCropperComponent;
   @ViewChild('fileInput') fileInput: ElementRef;
   @Input() user: User;
   @Input() profileImages: ProfileImage[];
-  @Output() previewUrl = new EventEmitter();
-  sanitizer: DomSanitizer;
   baseUrl = environment.apiUrl;
+  cropperSettings: CropperSettings;
+  cropperImg: any;
 
-  uploader: FileUploader;
-  hasBaseDropZoneOver = false;
-
-  constructor(private render: Renderer, private authService: AuthService, private domSanitizer: DomSanitizer) { }
+  constructor(private userService: UserService, private authService: AuthService) { }
 
   ngOnInit() {
-    this.initializeUploader();
-    this.sanitizer = this.domSanitizer;
+    this.cropperImg = {};
+    this.cropperSettings = new CropperSettings();
+    this.cropperSettings.noFileInput = true;
+    this.cropperSettings.preserveSize = true;
+    this.cropperSettings.canvasWidth = 200;
+    this.cropperSettings.canvasHeight = 200;
   }
 
-  inputClick() {
+  fileChangeListener($event) {
+    const image: any = new Image();
+    const file: File = $event.target.files[0];
+    const myReader: FileReader = new FileReader();
+    const that = this;
+    myReader.onloadend = function (loadEvent: any) {
+        image.src = loadEvent.target.result;
+        that.cropper.setImage(image);
+    };
+
+    if (file) {
+      myReader.readAsDataURL(file);
+    }
+  }
+
+  submit() {
+    const payload: any = {
+      base64string: this.cropper.image.image
+    };
+
+    this.userService.uploadUserProfileImage(this.user, payload).subscribe((profileImage) => {
+      if (this.profileImages) {
+        this.profileImages.filter(i => i.current)[0].current = false;
+      }
+
+      if (this.profileImages) {
+        this.profileImages.unshift(profileImage);
+      } else {
+        this.profileImages = new Array();
+        this.profileImages.push(profileImage);
+      }
+
+      this.user.profileImageUrl = profileImage.url;
+      this.authService.changeProfileImage(profileImage.url);
+      this.authService.currentUser.profileImageUrl = profileImage.url;
+      localStorage.setItem('sqrshr-user', JSON.stringify(this.authService.currentUser));
+      this.cancelEditor();
+    });
+  }
+
+  launchEditor() {
     this.fileInput.nativeElement.click();
   }
 
-  initializeUploader() {
-    this.uploader = new FileUploader({
-      url: this.baseUrl + 'users/' + this.user.username + '/profileimage',
-      authToken: 'Bearer ' + localStorage.getItem('sqrshr-token'),
-      isHTML5: true,
-      allowedFileType: ['image'],
-      removeAfterUpload: true,
-      autoUpload: false,
-      maxFileSize: 10 * 1024 * 1024
-    });
-
-    this.uploader.onAfterAddingFile = (file) => {
-      file.withCredentials = false;
-      if (this.uploader.queue.length > 1) {
-        this.uploader.removeFromQueue(this.uploader.queue[0]);
-      }
-      const url = (window.URL) ? window.URL.createObjectURL(file._file) : (window as any).webkitURL.createObjectURL(file._file);
-      this.setPreviewUrl(url);
-    };
-
-    this.uploader.onSuccessItem = (item, response, status, headers) => {
-      if (response) {
-        if (this.profileImages) {
-          this.profileImages.filter(i => i.current)[0].current = false;
-        }
-
-        this.setPreviewUrl('');
-
-        const res: ProfileImage = JSON.parse(response);
-        const profileImage = {
-          id: res.id,
-          publicId: res.publicId,
-          url: res.url,
-          dateAdded: res.dateAdded,
-          current: res.current
-        };
-
-        if (this.profileImages) {
-          this.profileImages.unshift(profileImage);
-        } else {
-          this.profileImages = new Array();
-          this.profileImages.push(profileImage);
-        }
-
-        this.user.profileImageUrl = profileImage.url;
-        this.authService.changeProfileImage(profileImage.url);
-        this.authService.currentUser.profileImageUrl = profileImage.url;
-        localStorage.setItem('sqrshr-user', JSON.stringify(this.authService.currentUser));
-      }
-    };
-  }
-
-  setPreviewUrl(url) {
-    this.previewUrl.emit(url);
+  cancelEditor() {
+    this.cropperImg = {};
   }
 
 }

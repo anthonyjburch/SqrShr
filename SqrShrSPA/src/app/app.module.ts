@@ -7,6 +7,7 @@ import { BsDropdownModule, CollapseModule, PaginationModule, CarouselModule, Mod
 import { JwtModule } from '@auth0/angular-jwt';
 import { FileUploadModule } from 'ng2-file-upload';
 import { TimeAgoPipe } from 'time-ago-pipe';
+import { ImageCropperComponent } from 'ng2-img-cropper';
 
 import { AppComponent } from './app.component';
 import { NavComponent } from './nav/nav.component';
@@ -73,7 +74,8 @@ export function tokenGetter() {
       PostCreateComponent,
       TimeAgoPipe,
       LocalTimePipe,
-      CapitalizeFirstPipe
+      CapitalizeFirstPipe,
+      ImageCropperComponent
    ],
    imports: [
       AppRoutingModule,
@@ -105,7 +107,7 @@ export function tokenGetter() {
        UserFollowersResolver,
        UserFollowingResolver,
        UserPostsResolver,
-       PostCommentsResolver
+       PostCommentsResolver,
    ],
    bootstrap: [
       AppComponent
