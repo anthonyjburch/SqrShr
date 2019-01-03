@@ -15,6 +15,7 @@ using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.Primitives;
 using SqrShrAPI.Data.Interfaces;
+using SqrShrAPI.Dtos.Media;
 using SqrShrAPI.Dtos.Post;
 using SqrShrAPI.Dtos.User;
 using SqrShrAPI.Interfaces;
@@ -113,48 +114,48 @@ namespace SqrShrAPI.Controllers
 
         [Authorize]
         [HttpPost("{id}/image")]
-        public async Task<IActionResult> AddPostImage(int id, [FromForm]PostImageUploadDto postImageUploadDto)
+        public async Task<IActionResult> AddPostImage(int id, ImageUploadDto imageUploadDto)
         {
             var post = await _repo.GetPost(id);
 
-            if (post == null)
+            if (post == null) 
                 return NotFound();
 
             if (post.User.Username != User.FindFirst(ClaimTypes.Name).Value)
                 return Unauthorized();
 
-            var file = postImageUploadDto.File;
+            var base64string = imageUploadDto.base64string.Substring(imageUploadDto.base64string.IndexOf(",") + 1);
+            byte[] bytes = Convert.FromBase64String(base64string);
+
             var uploadResult = new ImageUploadResult();
 
-            if (file.Length > 0)
+            if (bytes.Length > 0)
             {
-                using (var stream = file.OpenReadStream())
+                using (Stream stream = new MemoryStream(bytes))
                 {
                     var uploadParams = new ImageUploadParams()
                     {
                         Folder = "post_images/" + post.User.Id.ToString(),
                         Format = "jpg",
-                        File = new FileDescription(file.Name, stream),
-                        Transformation = new Transformation().Width(500).Height(500).Crop("fill").Gravity("face")
+                        File = new FileDescription("postimage", stream),
+                        Transformation = new Transformation().Width(500).Height(500)
                     };
 
                     uploadResult = _cloudinary.Upload(uploadParams);
                 }
-
-                postImageUploadDto.Url = uploadResult.Uri.ToString();
-                postImageUploadDto.PublicId = uploadResult.PublicId;
-
-                var newPostImage = _mapper.Map<PostImage>(postImageUploadDto);
-                
-                post.PostImages.Add(newPostImage);
-
-                if (await _repo.SaveAll())
-                {
-                    return CreatedAtRoute("GetPost", new { id = post.Id }, _mapper.Map<PostReturnDto>(post));
-                }
-
             }
 
+            PostImage postImage = new PostImage();
+            postImage.Url = uploadResult.Uri.ToString();
+            postImage.PublicId = uploadResult.PublicId;
+
+            post.PostImages.Add(postImage);
+
+            if (await _repo.SaveAll())
+            {
+                return CreatedAtRoute("GetPost", new { id = post.Id }, _mapper.Map<PostReturnDto>(post));
+            }
+            
             return null;
         }
 

@@ -35,6 +35,10 @@ export class PostService {
     return this.http.post(this.baseUrl + 'posts/' + username, post);
   }
 
+  uploadPostImage(postId: number, image: any) {
+    return this.http.post(this.baseUrl + 'posts/' + postId + '/image', image);
+  }
+
   getPost(postId: number) {
     return this.http.get(this.baseUrl + 'posts/' + postId);
   }

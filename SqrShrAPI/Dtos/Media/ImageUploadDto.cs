@@ -1,6 +1,6 @@
 namespace SqrShrAPI.Dtos.Media
 {
-    public class ProfileImageUploadDto
+    public class ImageUploadDto
     {
         public string base64string { get; set; }
     }

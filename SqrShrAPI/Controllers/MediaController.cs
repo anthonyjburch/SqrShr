@@ -130,62 +130,11 @@ namespace SqrShrAPI.Controllers
                 return Ok();
 
             return BadRequest("Error deleting profile image");
-        }
-
-        // [Authorize]
-        // [HttpPost("api/users/{username}/profileimage")]
-        // public async Task<IActionResult> AddUserProfileImage(string username, [FromForm]ProfileImageUploadDto profileImageUploadDto)
-        // {
-        //     if (username != User.FindFirst(ClaimTypes.Name).Value)
-        //         return Unauthorized();
-
-        //     var userFromRepo = await _repo.GetUser(username);
-
-        //     var file = profileImageUploadDto.File;
-
-        //     var uploadResult = new ImageUploadResult();
-
-        //     if (file.Length > 0)
-        //     {
-        //         using (var stream = file.OpenReadStream())
-        //         {
-        //             var uploadParams = new ImageUploadParams()
-        //             {
-        //                 Folder = "profile_images/" + userFromRepo.Id.ToString(),
-        //                 Format = "jpg",
-        //                 File = new FileDescription(file.Name, stream),
-        //                 Transformation = new Transformation().Width(500).Height(500).Crop("fill").Gravity("face")
-        //             };
-
-        //             uploadResult = _cloudinary.Upload(uploadParams);
-        //         }
-        //     }
-
-        //     profileImageUploadDto.Url = uploadResult.Uri.ToString();
-        //     profileImageUploadDto.PublicId = uploadResult.PublicId;
-
-        //     var newProfileImage = _mapper.Map<ProfileImage>(profileImageUploadDto);
-
-        //     var currentProfileImage = userFromRepo.ProfileImages.FirstOrDefault(i => i.Current);
-        //     if (currentProfileImage != null)
-        //         currentProfileImage.Current = false;
-
-        //     newProfileImage.Current = true;
-
-        //     userFromRepo.ProfileImages.Add(newProfileImage);
-
-        //     if (await _repo.SaveAll())
-        //     {
-        //         var profileImageToReturn = _mapper.Map<ProfileImageReturnDto>(newProfileImage);
-        //         return CreatedAtRoute("GetProfileImage", new { id = newProfileImage.Id }, profileImageToReturn);
-        //     }
-
-        //     return BadRequest("Error uploading profile image.");
-        // }
+        }   
 
         [Authorize]
         [HttpPost("api/users/{username}/profileimage")]
-        public async Task<IActionResult> AddUserProfileImage(string username, ProfileImageUploadDto profileImageUploadDto)
+        public async Task<IActionResult> AddUserProfileImage(string username, ImageUploadDto profileImageUploadDto)
         {
             if (username != User.FindFirst(ClaimTypes.Name).Value)
             return Unauthorized();

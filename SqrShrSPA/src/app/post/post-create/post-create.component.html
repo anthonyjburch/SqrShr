@@ -14,18 +14,30 @@
       <div class="card-body">
         <div class="row mb-2">
           <div class="col-12 col-sm-3">
-              <button class="btn btn-link" (click)="openPhotoSelector()"><span><i class="far fa-images fa-2x"></i></span></button>
-              <button class="btn btn-link"><span><i class="fas fa-globe-americas fa-2x"></i></span></button>
+              <button class="btn btn-link" *ngIf="!cropping" [disabled]="images.length >= 5 || submitting" (click)="openFileSelector()"><span><i class="far fa-images fa-2x"></i></span></button>
+              <button class="btn btn-link" *ngIf="!cropping" [disabled]="submitting"><span><i class="fas fa-globe-americas fa-2x"></i></span></button>
           </div>
-          <div class="col">
-            <img class="mr-1 mb-1 img-preview" *ngFor="let image of images" (click)="removeImage(image)" [src]="sanitizer.bypassSecurityTrustUrl(image)">
+          <div class="col" *ngIf="!submitting">
+            <img class="mr-1 mb-1 img-preview" *ngFor="let image of images" (click)="removeImage(image)" [src]="image">
           </div>
         </div>
-        <textarea class="form-control" rows="7" [(ngModel)]="content"></textarea>
-        <div class="row mt-2">
+        <div class="row">
           <div class="col">
-            <button type="button" class="btn btn-primary" (click)="submitPost()" [disabled]="loading"><span>Submit</span><i class="fa fa-spinner fa-spin ml-2" *ngIf="loading"></i></button>
-            <button type="button" class="btn btn-warning ml-2" (click)="closeEditor()" *ngIf="!loading">Cancel</button>
+            <ngx-croppie #ngxCroppie *ngIf="croppieImage" [imageUrl]="croppieImage" [croppieOptions]="croppieOptions" (result)="updateCroppie($event)"></ngx-croppie>
+          </div>
+        </div>
+        <div class="row" *ngIf="cropping">
+          <div class="col text-center">
+            <button class="btn btn-outline-info btn-small mr-2" (click)="submitCropper()">Ok</button>
+            <button class="btn btn-outline-warning btn-small" (click)="closeCropper()">Cancel</button>
+          </div>
+        </div>
+        <textarea class="form-control" *ngIf="!cropping && !submitting" rows="7" [(ngModel)]="content"></textarea>
+        <div class="row mt-2" *ngIf="!cropping">
+          <div class="col">
+            <button type="button" class="btn btn-primary mr-2" (click)="submitPost()" [disabled]="submitting"><span>Submit</span><i class="fa fa-spinner fa-spin ml-2" *ngIf="submitting"></i></button>
+            <button type="button" class="btn btn-warning mr-2" (click)="closeEditor()" [disabled]="submitting">Cancel</button>
+            <span *ngIf="uploading && images.length">Uploading {{uploading}}/{{images.length}}</span>
           </div>
         </div>
       </div>
@@ -33,4 +45,5 @@
   </div>
 </div>
 
-<input type="file" class="d-none" name="file" #fileInput ng2FileSelect [uploader]="uploader" />
+<input #fileInput class="hidden" type="file" (change)="fileChangeListener($event)">
+<canvas #canvas class="hidden"></canvas>
