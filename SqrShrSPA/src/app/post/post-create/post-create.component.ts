@@ -1,13 +1,15 @@
-import { Component, OnInit, ElementRef, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { trigger, transition, animate, style, state, group } from '@angular/animations';
-import { FileUploader } from 'ng2-file-upload';
 import { environment } from '../../../environments/environment';
 import { User } from '../../_models/user';
 import { DomSanitizer } from '@angular/platform-browser';
 import { PostService } from '../../_services/post.service';
 import { Post } from 'src/app/_models/post';
-import { map } from 'rxjs/operators';
 import { AlertifyService } from 'src/app/_services/alertify.service';
+import { CroppieOptions } from 'croppie';
+import { NgxCroppieComponent } from 'ngx-croppie';
+import { map } from 'rxjs/operators';
+import { forkJoin, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-post-create',
@@ -49,95 +51,167 @@ import { AlertifyService } from 'src/app/_services/alertify.service';
 ]
 })
 
-export class PostCreateComponent implements OnInit {
+export class PostCreateComponent implements OnInit, AfterViewInit {
   animationState = 'out';
   @ViewChild('fileInput') fileInput: ElementRef;
+  @ViewChild('canvas') canvas: ElementRef;
+  @ViewChild('ngxCroppie') ngxCroppie: NgxCroppieComponent;
   @Input() posts: Post[];
   @Input() user: User;
-  images: any[] = [];
+  context: CanvasRenderingContext2D;
+  images: string[] = [];
   content: string;
-  uploader: FileUploader;
+  cropping: boolean;
+  submitting: boolean;
+  uploading: number;
+  croppieImage: string;
+  croppedImage: string;
   baseUrl = environment.apiUrl;
-  sanitizer: DomSanitizer;
-  loading = false;
 
-  constructor(private postService: PostService, private domSanitizer: DomSanitizer, private alertify: AlertifyService) { }
+  constructor(private postService: PostService, private alertify: AlertifyService) { }
 
   ngOnInit() {
-      this.sanitizer = this.domSanitizer;
-      this.initializeUploader();
+  }
+
+  ngAfterViewInit() {
+      this.context = (<HTMLCanvasElement>this.canvas.nativeElement).getContext('2d');
+  }
+
+  public get croppieOptions(): CroppieOptions {
+      const opts: CroppieOptions = {};
+      opts.viewport = {
+          width: 250,
+          height: 250
+      };
+
+      opts.boundary = {
+          width: 300,
+          height: 300
+      };
+
+      opts.enforceBoundary = true;
+      return opts;
   }
 
   openEditor() {
     this.animationState = 'in';
   }
 
+  openFileSelector() {
+      this.fileInput.nativeElement.click();
+  }
+
   closeEditor() {
     this.animationState = 'out';
     this.images = [];
     this.content = '';
+    this.closeCropper();
   }
 
-  openPhotoSelector() {
-      this.fileInput.nativeElement.click();
+  closeCropper() {
+      this.fileInput.nativeElement.value = null;
+      this.croppieImage = '';
+      this.cropping = false;
   }
 
-  removeImage(img: any) {
-      this.images.splice(this.images.findIndex(i => i === img), 1);
+  fileChangeListener($event) {
+      this.cropping = true;
+      const file: File = $event.target.files[0];
+      this.resizeImage(file);
   }
 
-  initializeUploader() {
-    this.uploader = new FileUploader({
-      authToken: 'Bearer ' + localStorage.getItem('sqrshr-token'),
-      isHTML5: true,
-      allowedFileType: ['image'],
-      removeAfterUpload: true,
-      autoUpload: false,
-      maxFileSize: 10 * 1024 * 1024
-    });
+  resizeImage(file: File) {
+    const img = document.createElement('img');
 
-    this.uploader.onAfterAddingFile = (file) => {
-        file.withCredentials = false;
-        const url = (window.URL) ? window.URL.createObjectURL(file._file) : (window as any).webkitURL.createObjectURL(file._file);
-        this.images.push(url);
-    };
+    img.onload = function (e) {
+      const MAX_WIDTH = 800;
+      const MAX_HEIGHT = 600;
+      let width = img.width;
+      let height = img.height;
 
-    this.uploader.onSuccessItem = (item, response, status, headers) => {
-        if (this.uploader.queue.length === 1) {
-            const postId = item.url.replace('/image', '').split('/')[item.url.replace('/image', '').split('/').length - 1];
-            this.addToPostsList(+postId);
+      if (width > height) {
+        if (width > MAX_WIDTH) {
+          height *= MAX_WIDTH / width;
+          width = MAX_WIDTH;
         }
-    };
+      } else {
+        if (height > MAX_HEIGHT) {
+          width *= MAX_HEIGHT / height;
+          height = MAX_HEIGHT;
+        }
+      }
+
+      this.canvas.nativeElement.width = width;
+      this.canvas.nativeElement.height = height;
+      this.context = this.canvas.nativeElement.getContext('2d');
+
+      this.context.drawImage(img, 0, 0, width, height);
+      this.croppieImage = this.canvas.nativeElement.toDataURL();
+    }.bind(this);
+
+    img.src = window.URL.createObjectURL(file);
   }
 
-  addToPostsList(postId: number) {
-      this.postService.getPost(postId).pipe(
-          map((postResponse: Post) => {
-              this.posts.unshift(postResponse);
-              this.closeEditor();
-              this.loading = false;
-          })
-      ).subscribe();
+  updateCroppie(src: string) {
+      this.ngxCroppie.outputFormatOptions = {
+          type: 'base64',
+          size: {
+              width: 500,
+              height: 500
+          },
+          format: 'jpeg',
+          quality: 1,
+          circle: false
+      };
+      this.croppedImage = src;
+  }
+
+  submitCropper() {
+      this.images.push(this.croppedImage);
+      this.closeCropper();
+  }
+
+  removeImage(img: string) {
+      if (confirm('Are you sure you want to remove this image?')) {
+        this.images.splice(this.images.findIndex(i => i === img), 1);
+      }
   }
 
   submitPost() {
-    const post: any = {
-        content: this.content
-    };
+      this.submitting = true;
 
-    this.postService.submitPost(this.user.username, post).subscribe((postResponse) => {
-        this.loading = true;
-        this.uploader.onBeforeUploadItem = (item) => {
-            item.url = this.baseUrl + 'posts/' + postResponse['id'] + '/image';
-        };
+      const post: any = {
+          content: this.content
+      };
 
-        if (this.uploader.queue.length > 0) {
-            this.uploader.uploadAll();
+      this.postService.submitPost(this.user.username, post).subscribe((postResponse) => {
+        if (!this.images.length) {
+            this.getPost(postResponse['id']);
+            this.closeEditor();
+            this.submitting = false;
         } else {
-            this.addToPostsList(postResponse['id']);
+            const observables = [];
+            for (let i = 0; i < this.images.length; i++) {
+                const image = {
+                    base64string: this.images[i]
+                };
+                observables.push(this.postService.uploadPostImage(postResponse['id'], image));
+            }
+
+            forkJoin(...observables).subscribe(() => {
+                this.getPost(postResponse['id']);
+                this.closeEditor();
+                this.submitting = false;
+            });
         }
-    }, error => {
-        this.alertify.genericError();
-    });
+      });
+  }
+
+  getPost(id: number) {
+      this.postService.getPost(id).pipe(
+          map((postResponse: Post) => {
+              this.posts.unshift(postResponse);
+          })
+      ).subscribe();
   }
 }
