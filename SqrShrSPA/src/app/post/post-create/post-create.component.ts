@@ -88,7 +88,7 @@ export class PostCreateComponent implements OnInit, AfterViewInit {
           width: 300,
           height: 300
       };
-
+      opts.enableOrientation = true;
       opts.enforceBoundary = true;
       return opts;
   }
@@ -213,5 +213,13 @@ export class PostCreateComponent implements OnInit, AfterViewInit {
               this.posts.unshift(postResponse);
           })
       ).subscribe();
+  }
+
+  rotateCounterClockwise() {
+      this.ngxCroppie.rotate(90);
+  }
+
+  rotateClockwise() {
+      this.ngxCroppie.rotate(-90);
   }
 }

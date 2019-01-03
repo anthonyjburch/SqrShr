@@ -15,7 +15,9 @@
 
 <div class="row" *ngIf="cropping">
   <div class="col text-center">
-    <button class="btn btn-success btn-small mr-2" (click)="submit()">Submit</button>
-    <button class="btn btn-warning btn-small" (click)="cancelEditor()">Clear</button>
+    <button class="btn btn-link mr-2" (click)="rotateCounterClockwise()"><i class="fas fa-undo"></i></button>
+<button class="btn btn-link text-success mr-2" (click)="submit()"><i class="far fa-check-square fa-2x"></i></button>
+<button class="btn btn-link text-warning mr-2" (click)="cancelEditor()"><i class="far fa-times-circle fa-2x"></i></button>
+<button class="btn btn-link" (click)="rotateClockwise()"><i class="fas fa-undo fa-flip-horizontal"></i></button>
   </div>
 </div>

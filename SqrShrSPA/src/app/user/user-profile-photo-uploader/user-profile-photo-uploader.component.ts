@@ -47,6 +47,7 @@ export class UserProfilePhotoUploaderComponent implements OnInit, AfterViewInit 
     };
 
     opts.enforceBoundary = true;
+    opts.enableOrientation = true;
     return opts;
   }
 
@@ -132,5 +133,13 @@ export class UserProfilePhotoUploaderComponent implements OnInit, AfterViewInit 
       circle: false
     };
     this.croppedImage = src;
+  }
+
+  rotateCounterClockwise() {
+    this.ngxCroppie.rotate(90);
+  }
+
+  rotateClockwise() {
+    this.ngxCroppie.rotate(-90);
   }
 }

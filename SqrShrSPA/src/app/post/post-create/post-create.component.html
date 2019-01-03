@@ -28,8 +28,10 @@
         </div>
         <div class="row" *ngIf="cropping">
           <div class="col text-center">
-            <button class="btn btn-outline-info btn-small mr-2" (click)="submitCropper()">Ok</button>
-            <button class="btn btn-outline-warning btn-small" (click)="closeCropper()">Cancel</button>
+            <button class="btn btn-link mr-2" (click)="rotateCounterClockwise()"><i class="fas fa-undo"></i></button>
+            <button class="btn btn-link text-success mr-2" (click)="submitCropper()"><i class="far fa-check-square fa-2x"></i></button>
+            <button class="btn btn-link text-warning mr-2" (click)="closeCropper()"><i class="far fa-times-circle fa-2x"></i></button>
+            <button class="btn btn-link" (click)="rotateClockwise()"><i class="fas fa-undo fa-flip-horizontal"></i></button>
           </div>
         </div>
         <textarea class="form-control" *ngIf="!cropping && !submitting" rows="7" [(ngModel)]="content"></textarea>

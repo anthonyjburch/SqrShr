@@ -1,3 +1,5 @@
+@import '../../../../node_modules/bootswatch/dist/yeti/variables';
+
 .post {
   padding-left: 0px;
   padding-right: 0px;
@@ -8,6 +10,7 @@
   width: 75px;
   object-fit: cover;
   opacity: 1;
+  border: 2px solid $info;
 }
 
 .img-preview:hover {
