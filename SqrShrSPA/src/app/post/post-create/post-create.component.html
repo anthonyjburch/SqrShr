@@ -14,8 +14,8 @@
       <div class="card-body">
         <div class="row mb-2">
           <div class="col-12 col-sm-3">
-              <button class="btn btn-link" *ngIf="!cropping" [disabled]="images.length >= 5 || submitting" (click)="openFileSelector()"><span><i class="far fa-images fa-2x"></i></span></button>
-              <button class="btn btn-link" *ngIf="!cropping" [disabled]="submitting"><span><i class="fas fa-globe-americas fa-2x"></i></span></button>
+              <button class="btn btn-link" *ngIf="!cropping" [disabled]="images.length >= 5 || submitting" (click)="openFileSelector()"><span><i class="fas fa-camera-retro fa-2x"></i></span></button>
+              <button class="btn btn-link" *ngIf="!cropping" [disabled]="submitting"><span><i class="far fa-map fa-2x"></i></span></button>
           </div>
           <div class="col" *ngIf="!submitting">
             <img class="mr-1 mb-1 img-preview" *ngFor="let image of images" (click)="removeImage(image)" [src]="image">
@@ -29,8 +29,8 @@
         <div class="row" *ngIf="cropping">
           <div class="col text-center">
             <button class="btn btn-link mr-2" (click)="rotateCounterClockwise()"><i class="fas fa-undo"></i></button>
-            <button class="btn btn-link text-success mr-2" (click)="submitCropper()"><i class="far fa-check-square fa-2x"></i></button>
-            <button class="btn btn-link text-warning mr-2" (click)="closeCropper()"><i class="far fa-times-circle fa-2x"></i></button>
+            <button class="btn btn-link mr-2" (click)="submitCropper()"><i class="far fa-check-square fa-2x"></i></button>
+            <button class="btn btn-link mr-2" (click)="closeCropper()"><i class="far fa-times-circle fa-2x"></i></button>
             <button class="btn btn-link" (click)="rotateClockwise()"><i class="fas fa-undo fa-flip-horizontal"></i></button>
           </div>
         </div>
